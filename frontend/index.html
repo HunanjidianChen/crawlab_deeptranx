@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; base-uri 'self'; connect-src 'self' ws: wss:; font-src 'self' data:; frame-src 'none'; img-src 'self' data: blob:; object-src 'none'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'"
+    >
+    <meta content="#173f3a" name="theme-color">
+    <link href="/brand/favicon.svg" rel="icon" type="image/svg+xml">
+    <link href="/font-awesome.min.css" rel="stylesheet">
+    <title>DeepTranX</title>
+    <script src="/js/vue3-sfc-loader.js"></script>
+    <script src="/js/login-canvas.js"></script>
+    <script src="/simplemde/simplemde.js"></script>
+  </head>
+  <body>
+    <noscript>DeepTranX requires JavaScript to run.</noscript>
+    <div id="loading-placeholder" aria-label="DeepTranX loading">
+      <div class="loading-brand">
+        <img alt="" height="64" src="/brand/mark.svg" width="64">
+        <div>
+          <div class="loading-title">DeepTranX</div>
+          <div class="loading-text">Starting workspace...</div>
+        </div>
+      </div>
+    </div>
+    <div id="app"></div>
+    <script src="/src/main.ts" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64">
+  <rect width="64" height="64" rx="10" fill="#167d70"/>
+  <path d="M15 16h16c11 0 18 6 18 16S42 48 31 48H15V16zm10 8v16h6c5 0 8-3 8-8s-3-8-8-8h-6z" fill="#fff"/>
+  <path d="M43 13h8v13h-8z" fill="#d98e32"/>
+  <text x="80" y="43" fill="#17201f" font-family="Segoe UI,Arial,sans-serif" font-size="34" font-weight="700">DeepTranX</text>
+</svg>

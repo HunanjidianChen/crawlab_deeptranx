@@ -1,0 +1,96 @@
+name: deeptranx
+
+services:
+  mongo:
+    image: mongo:4.2@sha256:699d652ed67423d689258bad7b316cf005dfbb82b334118ec306f049042f3717
+    restart: unless-stopped
+    command: ["mongod", "--bind_ip_all"]
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - deeptranx
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mongo",
+          "--quiet",
+          "--eval",
+          "db.adminCommand('ping').ok",
+          "mongodb://127.0.0.1:27017/admin",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  crawlab:
+    image: ${CRAWLAB_IMAGE:-deeptranx/crawlab:0.1.0-crawlab0.6.3}
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    restart: unless-stopped
+    environment:
+      CRAWLAB_NODE_MASTER: "Y"
+      CRAWLAB_NODE_NAME: ${CRAWLAB_NODE_NAME:-DeepTranX Master}
+      CRAWLAB_MONGO_HOST: mongo
+      CRAWLAB_MONGO_PORT: "27017"
+      CRAWLAB_GRPC_AUTHKEY: ${CRAWLAB_GRPC_AUTHKEY:?Set CRAWLAB_GRPC_AUTHKEY in .env}
+      CRAWLAB_FS_FILER_AUTHKEY: ${CRAWLAB_FS_FILER_AUTHKEY:?Set CRAWLAB_FS_FILER_AUTHKEY in .env}
+      CRAWLAB_TASK_HANDLER_MAXRUNNERS: ${CRAWLAB_TASK_HANDLER_MAXRUNNERS:-8}
+      TZ: ${TZ:-Asia/Shanghai}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    volumes:
+      - crawlab-data:/root/.crawlab
+    networks:
+      - deeptranx
+    depends_on:
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl --fail --silent --show-error http://127.0.0.1:8080/api/system-info >/dev/null || exit 1",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 45s
+
+  frontend-dev:
+    image: node:18.20.8-bookworm-slim
+    profiles: ["dev"]
+    working_dir: /workspace/frontend
+    command:
+      [
+        "sh",
+        "-lc",
+        "corepack enable && corepack prepare pnpm@7.33.7 --activate && pnpm install --frozen-lockfile && pnpm dev",
+      ]
+    restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
+      VITE_API_PROXY_TARGET: ${VITE_API_PROXY_TARGET:-http://crawlab:8080}
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "${FRONTEND_DEV_PORT:-5173}:5173"
+    volumes:
+      - ./frontend:/workspace/frontend
+      - ./patches:/workspace/patches:ro
+      - frontend-node-modules:/workspace/frontend/node_modules
+    networks:
+      - deeptranx
+    depends_on:
+      crawlab:
+        condition: service_healthy
+
+networks:
+  deeptranx:
+    driver: bridge
+
+volumes:
+  mongo-data:
+  crawlab-data:
+  frontend-node-modules:

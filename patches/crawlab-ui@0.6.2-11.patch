@@ -1,0 +1,71 @@
+diff --git a/dist/crawlab-ui.js b/dist/crawlab-ui.js
+index 4d173c7..300e56f 100644
+--- a/dist/crawlab-ui.js
++++ b/dist/crawlab-ui.js
+@@ -35551,7 +35551,7 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
+ });
+ const P_ = (e) => (Tr("data-v-eccc922c"), e = e(), $r(), e), Wre = /* @__PURE__ */ P_(() => /* @__PURE__ */ ae("div", { class: "left" }, null, -1)), Gre = { class: "right" }, qre = /* @__PURE__ */ P_(() => /* @__PURE__ */ ae("iframe", {
+   class: "item",
+-  src: "https://ghbtns.com/github-btn.html?user=crawlab-team&repo=crawlab&type=star&count=true",
++  src: "about:blank",
+   frameborder: "0",
+   scrolling: "0",
+   width: "105",
+@@ -35574,7 +35574,7 @@ function Kre(e, n, a, r, l, s) {
+           e.systemInfo.edition === "global.edition.community" ? Xe((C(), I(c, {
+             key: 0,
+             class: "item",
+-            href: "https://www.crawlab.cn/prices",
++            href: "#",
+             target: "_blank",
+             type: "warning"
+           }, {
+@@ -35591,7 +35591,7 @@ function Kre(e, n, a, r, l, s) {
+           ]) : $e("", !0),
+           Xe((C(), I(c, {
+             class: "item",
+-            href: `https://docs.crawlab.cn/${e.locale}/`,
++            href: "#",
+             target: "_blank"
+           }, {
+             default: z(() => [
+diff --git a/src/layouts/components/Header.vue b/src/layouts/components/Header.vue
+index 4785201..5554c56 100644
+--- a/src/layouts/components/Header.vue
++++ b/src/layouts/components/Header.vue
+@@ -5,8 +5,9 @@
+       </div>
+       <div class="right">
+         <iframe
++          v-if="false"
+           class="item"
+-          src="https://ghbtns.com/github-btn.html?user=crawlab-team&repo=crawlab&type=star&count=true"
++          src="about:blank"
+           frameborder="0"
+           scrolling="0"
+           width="105"
+@@ -14,10 +15,10 @@
+           title="GitHub"
+         />
+         <el-link
+-          v-if="systemInfo.edition === 'global.edition.community'"
++          v-if="false"
+           v-track="{code: 'click_header_pro'}"
+           class="item"
+-          href="https://www.crawlab.cn/prices"
++          href="#"
+           target="_blank"
+           type="warning"
+         >
+@@ -25,9 +26,10 @@
+           {{ t('global.upgrade.pro') }}
+         </el-link>
+         <el-link
++          v-if="false"
+           v-track="{code: 'click_header_docs'}"
+           class="item"
+-          :href="`https://docs.crawlab.cn/${locale}/`"
++          href="#"
+           target="_blank"
+         >
+           <font-awesome-icon class="icon" :icon="['fa', 'book']"/>
