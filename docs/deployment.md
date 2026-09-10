@@ -18,6 +18,7 @@ MongoDB is reachable only on the Compose network. The named volumes are:
 
 - `deeptranx_mongo-data`: MongoDB `/data/db`
 - `deeptranx_crawlab-data`: Crawlab `/root/.crawlab`
+- `deeptranx_bhol-exports`: BHOL JSONL `/data/exports`
 
 Do not use `docker compose down --volumes` unless permanent data deletion is
 intended.
@@ -42,7 +43,8 @@ Create a consistent backup:
 ```
 
 The script temporarily stops Crawlab, dumps MongoDB, archives
-`/root/.crawlab`, then starts Crawlab again. Files are written below `backup/`.
+`/root/.crawlab` and `/data/exports`, then starts Crawlab again. Files are
+written below `backup/`.
 
 Restore:
 

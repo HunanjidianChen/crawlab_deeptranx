@@ -1,8 +1,42 @@
 diff --git a/dist/crawlab-ui.js b/dist/crawlab-ui.js
-index 4d173c7..300e56f 100644
+index 4d173c7..849bd71 100644
 --- a/dist/crawlab-ui.js
 +++ b/dist/crawlab-ui.js
-@@ -35551,7 +35551,7 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
+@@ -3167,7 +3167,7 @@ const Yy = /* @__PURE__ */ oe(TT, [["render", kT], ["__scopeId", "data-v-148747f
+   {
+     name: "Disclaimer",
+     path: `${Bg}/disclaimer`,
+-    component: () => import("./Disclaimer-231bdd09.js").then((e) => e.a)
++    redirect: "/home"
+   },
+   {
+     name: "MySettings",
+@@ -3838,7 +3838,6 @@ function u6() {
+ }
+ function d6() {
+   return [
+-    { path: "/misc/disclaimer", title: "router.menuItems.misc.disclaimer", icon: ["fa", "file-signature"] },
+     { path: "/misc/my-settings", title: "router.menuItems.misc.mySettings", icon: ["fa", "user-cog"] }
+   ].map((n) => (n.hidden = !0, n));
+ }
+@@ -35530,8 +35529,6 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
+       setTimeout(() => {
+         localStorage.removeItem("token"), r.commit("user/resetMe"), a.push("/login");
+       }, 10);
+-    }, g = () => {
+-      a.push("/misc/disclaimer");
+     }, v = () => {
+       a.push("/misc/my-settings");
+     }, _ = X(() => s.systemInfo || {});
+@@ -35542,7 +35539,6 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
+       username: p,
+       setLang: m,
+       onLogout: f,
+-      onClickDisclaimer: g,
+       onClickMySettings: v,
+       systemInfo: _,
+       t: e
+@@ -35551,7 +35547,7 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
  });
  const P_ = (e) => (Tr("data-v-eccc922c"), e = e(), $r(), e), Wre = /* @__PURE__ */ P_(() => /* @__PURE__ */ ae("div", { class: "left" }, null, -1)), Gre = { class: "right" }, qre = /* @__PURE__ */ P_(() => /* @__PURE__ */ ae("iframe", {
    class: "item",
@@ -11,7 +45,7 @@ index 4d173c7..300e56f 100644
    frameborder: "0",
    scrolling: "0",
    width: "105",
-@@ -35574,7 +35574,7 @@ function Kre(e, n, a, r, l, s) {
+@@ -35574,7 +35570,7 @@ function Kre(e, n, a, r, l, s) {
            e.systemInfo.edition === "global.edition.community" ? Xe((C(), I(c, {
              key: 0,
              class: "item",
@@ -20,7 +54,7 @@ index 4d173c7..300e56f 100644
              target: "_blank",
              type: "warning"
            }, {
-@@ -35591,7 +35591,7 @@ function Kre(e, n, a, r, l, s) {
+@@ -35591,7 +35587,7 @@ function Kre(e, n, a, r, l, s) {
            ]) : $e("", !0),
            Xe((C(), I(c, {
              class: "item",
@@ -29,8 +63,23 @@ index 4d173c7..300e56f 100644
              target: "_blank"
            }, {
              default: z(() => [
+@@ -35662,14 +35658,6 @@ function Kre(e, n, a, r, l, s) {
+             dropdown: z(() => [
+               y(g, null, {
+                 default: z(() => [
+-                  Xe((C(), I(f, { onClick: e.onClickDisclaimer }, {
+-                    default: z(() => [
+-                      Je(ge(e.t("layouts.components.header.disclaimer")), 1)
+-                    ]),
+-                    _: 1
+-                  }, 8, ["onClick"])), [
+-                    [w, { code: "click_header_disclaimer" }]
+-                  ]),
+                   Xe((C(), I(f, { onClick: e.onClickMySettings }, {
+                     default: z(() => [
+                       Je(ge(e.t("layouts.components.header.mySettings")), 1)
 diff --git a/src/layouts/components/Header.vue b/src/layouts/components/Header.vue
-index 4785201..5554c56 100644
+index 4785201..45d7d55 100644
 --- a/src/layouts/components/Header.vue
 +++ b/src/layouts/components/Header.vue
 @@ -5,8 +5,9 @@
@@ -69,3 +118,61 @@ index 4785201..5554c56 100644
            target="_blank"
          >
            <font-awesome-icon class="icon" :icon="['fa', 'book']"/>
+@@ -79,12 +81,6 @@
+           </span>
+           <template #dropdown>
+             <el-dropdown-menu>
+-              <el-dropdown-item
+-                v-track="{code: 'click_header_disclaimer'}"
+-                @click="onClickDisclaimer"
+-              >
+-                {{ t('layouts.components.header.disclaimer') }}
+-              </el-dropdown-item>
+               <el-dropdown-item
+                 v-track="{code: 'click_header_my_settings'}"
+                 @click="onClickMySettings"
+@@ -171,11 +167,6 @@ export default defineComponent({
+       }, 10);
+     };
+ 
+-    // on click disclaimer
+-    const onClickDisclaimer = () => {
+-      router.push('/misc/disclaimer');
+-    };
+-
+     // on click my settings
+     const onClickMySettings = () => {
+       router.push('/misc/my-settings');
+@@ -190,7 +181,6 @@ export default defineComponent({
+       username,
+       setLang,
+       onLogout,
+-      onClickDisclaimer,
+       onClickMySettings,
+       systemInfo,
+       t,
+diff --git a/src/router/index.ts b/src/router/index.ts
+index c597776..b442534 100644
+--- a/src/router/index.ts
++++ b/src/router/index.ts
+@@ -78,7 +78,6 @@ export function getDefaultSidebarMenuItems(): MenuItem[] {
+ 
+ export function getDefaultHiddenMenuItems(): MenuItem[] {
+   const items = [
+-    {path: '/misc/disclaimer', title: 'router.menuItems.misc.disclaimer', icon: ['fa', 'file-signature']},
+     {path: '/misc/my-settings', title: 'router.menuItems.misc.mySettings', icon: ['fa', 'user-cog']},
+   ] as MenuItem[];
+   return items.map(d => {
+diff --git a/src/router/misc.ts b/src/router/misc.ts
+index e0cf001..3d1d62e 100644
+--- a/src/router/misc.ts
++++ b/src/router/misc.ts
+@@ -6,7 +6,7 @@ export default [
+   {
+     name: 'Disclaimer',
+     path: `${endpoint}/disclaimer`,
+-    component: () => import('@/views/misc/Disclaimer.vue'),
++    redirect: '/home',
+   },
+   {
+     name: 'MySettings',

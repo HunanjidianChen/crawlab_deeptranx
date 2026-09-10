@@ -38,11 +38,16 @@ services:
       CRAWLAB_GRPC_AUTHKEY: ${CRAWLAB_GRPC_AUTHKEY:?Set CRAWLAB_GRPC_AUTHKEY in .env}
       CRAWLAB_FS_FILER_AUTHKEY: ${CRAWLAB_FS_FILER_AUTHKEY:?Set CRAWLAB_FS_FILER_AUTHKEY in .env}
       CRAWLAB_TASK_HANDLER_MAXRUNNERS: ${CRAWLAB_TASK_HANDLER_MAXRUNNERS:-8}
+      BHOL_MONGO_HOST: mongo
+      BHOL_MONGO_PORT: "27017"
+      BHOL_MONGO_DB: ${BHOL_MONGO_DB:-bhol_pipeline}
+      BHOL_EXPORT_DIR: ${BHOL_EXPORT_DIR:-/data/exports/bhol}
       TZ: ${TZ:-Asia/Shanghai}
     ports:
       - "${APP_PORT:-8080}:8080"
     volumes:
       - crawlab-data:/root/.crawlab
+      - bhol-exports:/data/exports
     networks:
       - deeptranx
     depends_on:
@@ -93,4 +98,5 @@ networks:
 volumes:
   mongo-data:
   crawlab-data:
+  bhol-exports:
   frontend-node-modules:

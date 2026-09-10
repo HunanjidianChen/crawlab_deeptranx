@@ -18,6 +18,7 @@ if (-not $backupRoot.StartsWith($allowedRoot, [System.StringComparison]::Ordinal
 
 $mongoArchive = Join-Path $backupRoot 'mongo.archive.gz'
 $crawlabArchive = Join-Path $backupRoot 'crawlab-data.tar.gz'
+$bholExportsArchive = Join-Path $backupRoot 'bhol-exports.tar.gz'
 if (-not (Test-Path -LiteralPath $mongoArchive) -or -not (Test-Path -LiteralPath $crawlabArchive)) {
     throw 'The backup must contain mongo.archive.gz and crawlab-data.tar.gz.'
 }
@@ -50,6 +51,12 @@ try {
     & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup:ro" --entrypoint /bin/sh $runtimeImage -c 'find /root/.crawlab -mindepth 1 -maxdepth 1 -exec rm -rf {} +; tar -C /root -xzf /backup/crawlab-data.tar.gz'
     if ($LASTEXITCODE -ne 0) {
         throw 'Crawlab data restore failed.'
+    }
+    if (Test-Path -LiteralPath $bholExportsArchive) {
+        & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup:ro" --entrypoint /bin/sh $runtimeImage -c 'find /data/exports -mindepth 1 -maxdepth 1 -exec rm -rf {} +; tar -C /data -xzf /backup/bhol-exports.tar.gz'
+        if ($LASTEXITCODE -ne 0) {
+            throw 'BHOL JSONL export restore failed.'
+        }
     }
 }
 finally {

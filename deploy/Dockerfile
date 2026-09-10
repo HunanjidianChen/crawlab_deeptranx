@@ -21,7 +21,18 @@ LABEL org.opencontainers.image.title="DeepTranX Crawlab" \
       org.opencontainers.image.licenses="BSD-3-Clause" \
       org.opencontainers.image.source="local"
 
-RUN mkdir -p /var/log/crawlab
+ENV VIRTUAL_ENV=/opt/crawlab-python \
+    PATH=/opt/crawlab-python/bin:${PATH} \
+    PYTHONNOUSERSITE=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+COPY deploy/requirements-spider.txt /tmp/requirements-spider.txt
+
+RUN python3.10 -m pip install --no-cache-dir virtualenv==20.26.6 \
+    && python3.10 -m virtualenv "${VIRTUAL_ENV}" \
+    && python -m pip install --no-cache-dir -r /tmp/requirements-spider.txt \
+    && rm -f /tmp/requirements-spider.txt \
+    && mkdir -p /var/log/crawlab /data/exports/bhol
 
 COPY --from=frontend-build /workspace/frontend/dist /app/dist
 COPY deploy/nginx/crawlab.conf /etc/nginx/conf.d/crawlab.conf
