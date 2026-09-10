@@ -23,7 +23,7 @@ reference CDN assets.
 ## Functional Acceptance
 
 1. Sign in with `admin/admin` on a fresh database and change the password.
-2. Confirm `DeepTranX Master` is enabled, online and marked as a Master node.
+2. Confirm `DEEPTRANX Master` is enabled, online and marked as a Master node.
 3. Create or upload a spider and run it on the Master node.
 4. Check task status, logs, results and schedule execution.
 5. Recreate the containers and confirm MongoDB data, spiders and configuration

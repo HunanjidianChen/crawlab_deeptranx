@@ -1,5 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="10" fill="#167d70"/>
-  <path d="M15 16h16c11 0 18 6 18 16S42 48 31 48H15V16zm10 8v16h6c5 0 8-3 8-8s-3-8-8-8h-6z" fill="#fff"/>
-  <path d="M43 13h8v13h-8z" fill="#d98e32"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 170 472 428">
+  <defs>
+    <linearGradient id="deepfuture-mark-gradient" x1="225.13" y1="178.69" x2="262.25" y2="602.9" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0041a0"/>
+      <stop offset=".27" stop-color="#0049c0"/>
+      <stop offset=".64" stop-color="#55e3f2"/>
+      <stop offset="1" stop-color="#069e1b"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#deepfuture-mark-gradient)" d="m471.62,300.75l-79.53-113.59H68.29l43.22,61.73h237.88l36.5,52.13c-1.09,1.55-120.92,172.72-122.04,174.31l-79.06-112.92h84.7l43.22-61.73H0l43.22,61.73h56.03c.44.62,164.03,234.29,164.6,235.1l207.77-296.76Z"/>
 </svg>

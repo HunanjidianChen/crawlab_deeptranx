@@ -130,9 +130,9 @@ body,
   background-size: 36px 36px;
 }
 
-.sidebar .logo-sub-title {
-  margin-left: 4px !important;
-  color: #a8c2bc !important;
+.sidebar .logo-sub-title,
+.login-container .title .logo-sub-title {
+  display: none !important;
 }
 
 .login-container {
@@ -167,16 +167,14 @@ body,
   background: url("/brand/logo-dark.svg") left center / 204px auto no-repeat;
 }
 
-.login-container .title .logo-sub-title {
-  margin-left: 4px !important;
-  font-size: 12px !important;
-  line-height: 18px !important;
-}
-
 .login-container .tips,
 .login-container .alternatives,
 .login-container .lang {
   color: var(--dt-muted) !important;
+}
+
+.login-container .tips {
+  display: none !important;
 }
 
 .login-container #canvas {
