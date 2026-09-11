@@ -46,9 +46,17 @@ try {
     if ($LASTEXITCODE -ne 0) {
         throw 'Crawlab workspace backup failed.'
     }
+    & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup" --entrypoint /bin/sh $runtimeImage -c 'tar -C /root -czf /backup/crawlab-repo.tar.gz crawlab_repo'
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Crawlab Git repository backup failed.'
+    }
+    & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup" --entrypoint /bin/sh $runtimeImage -c 'tar -C /data -czf /backup/crawlab-storage.tar.gz --exclude=seaweedfs --exclude=exports .'
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Crawlab file content backup failed.'
+    }
     & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup" --entrypoint /bin/sh $runtimeImage -c 'tar -C /data -czf /backup/crawlab-files.tar.gz seaweedfs'
     if ($LASTEXITCODE -ne 0) {
-        throw 'Crawlab file service backup failed.'
+        throw 'Crawlab file metadata backup failed.'
     }
     & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup" --entrypoint /bin/sh $runtimeImage -c 'tar -C /data -czf /backup/bhol-exports.tar.gz exports'
     if ($LASTEXITCODE -ne 0) {
@@ -62,6 +70,8 @@ try {
         frontendVersion = '0.1.0'
         bholDatabase = 'bhol_pipeline'
         includesCrawlabWorkspace = $true
+        includesCrawlabRepo = $true
+        includesCrawlabStorage = $true
         includesCrawlabFiles = $true
         includesBholExports = $true
     }

@@ -18,8 +18,10 @@ MongoDB is reachable only on the Compose network. The named volumes are:
 
 - `deeptranx_mongo-data`: MongoDB `/data/db`
 - `deeptranx_crawlab-data`: Crawlab `/root/.crawlab`
-- `deeptranx_crawlab-files`: uploaded spider source files `/data/seaweedfs`
+- `deeptranx_crawlab-storage`: SeaweedFS uploaded file contents under `/data`
+- `deeptranx_crawlab-files`: SeaweedFS metadata and indexes `/data/seaweedfs`
 - `deeptranx_crawlab-workspace`: materialized task workspaces `/root/crawlab_workspace`
+- `deeptranx_crawlab-repo`: persistent spider Git repositories `/root/crawlab_repo`
 - `deeptranx_bhol-exports`: BHOL JSONL `/data/exports`
 
 BHOL crawlers use MongoDB as the source of truth and also publish display

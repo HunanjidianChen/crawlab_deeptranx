@@ -38,6 +38,17 @@ docker compose --env-file .env -f deploy/compose.yml logs crawlab
 The patch path must remain `../patches/crawlab-ui@0.6.2-11.patch` relative to
 `frontend/package.json`. Regenerate the lockfile only with pnpm `7.33.7`.
 
+## Spider Files Are Empty Or Cannot Be Opened
+
+Crawlab stores SeaweedFS metadata under `/data/seaweedfs`, but its volume
+content files are written directly under `/data`. Both locations must be
+persistent. The Compose file mounts `deeptranx_crawlab-storage` at `/data` and
+keeps the metadata volume nested at `/data/seaweedfs`.
+
+Spider Git repositories also require the `deeptranx_crawlab-repo` volume at
+`/root/crawlab_repo`. If file contents were lost before these mounts existed,
+re-upload the spider source after recreating the Crawlab container.
+
 ## Host Node Version Warning
 
 The frontend intentionally requires Node `18.20.x`. A different host version

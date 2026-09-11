@@ -19,6 +19,8 @@ if (-not $backupRoot.StartsWith($allowedRoot, [System.StringComparison]::Ordinal
 $mongoArchive = Join-Path $backupRoot 'mongo.archive.gz'
 $crawlabArchive = Join-Path $backupRoot 'crawlab-data.tar.gz'
 $crawlabWorkspaceArchive = Join-Path $backupRoot 'crawlab-workspace.tar.gz'
+$crawlabRepoArchive = Join-Path $backupRoot 'crawlab-repo.tar.gz'
+$crawlabStorageArchive = Join-Path $backupRoot 'crawlab-storage.tar.gz'
 $crawlabFilesArchive = Join-Path $backupRoot 'crawlab-files.tar.gz'
 $bholExportsArchive = Join-Path $backupRoot 'bhol-exports.tar.gz'
 if (-not (Test-Path -LiteralPath $mongoArchive) -or -not (Test-Path -LiteralPath $crawlabArchive)) {
@@ -58,6 +60,18 @@ try {
         & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup:ro" --entrypoint /bin/sh $runtimeImage -c 'find /root/crawlab_workspace -mindepth 1 -maxdepth 1 -exec rm -rf {} +; tar -C /root -xzf /backup/crawlab-workspace.tar.gz'
         if ($LASTEXITCODE -ne 0) {
             throw 'Crawlab workspace restore failed.'
+        }
+    }
+    if (Test-Path -LiteralPath $crawlabRepoArchive) {
+        & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup:ro" --entrypoint /bin/sh $runtimeImage -c 'find /root/crawlab_repo -mindepth 1 -maxdepth 1 -exec rm -rf {} +; tar -C /root -xzf /backup/crawlab-repo.tar.gz'
+        if ($LASTEXITCODE -ne 0) {
+            throw 'Crawlab Git repository restore failed.'
+        }
+    }
+    if (Test-Path -LiteralPath $crawlabStorageArchive) {
+        & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup:ro" --entrypoint /bin/sh $runtimeImage -c 'find /data -mindepth 1 -maxdepth 1 ! -name seaweedfs ! -name exports -exec rm -rf {} +; tar -C /data -xzf /backup/crawlab-storage.tar.gz'
+        if ($LASTEXITCODE -ne 0) {
+            throw 'Crawlab file content restore failed.'
         }
     }
     if (Test-Path -LiteralPath $crawlabFilesArchive) {
