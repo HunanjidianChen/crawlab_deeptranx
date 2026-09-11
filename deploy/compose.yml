@@ -36,17 +36,21 @@ services:
       CRAWLAB_MONGO_HOST: mongo
       CRAWLAB_MONGO_PORT: "27017"
       CRAWLAB_GRPC_AUTHKEY: ${CRAWLAB_GRPC_AUTHKEY:?Set CRAWLAB_GRPC_AUTHKEY in .env}
+      CRAWLAB_GRPC_AUTH_KEY: ${CRAWLAB_GRPC_AUTHKEY:?Set CRAWLAB_GRPC_AUTHKEY in .env}
       CRAWLAB_FS_FILER_AUTHKEY: ${CRAWLAB_FS_FILER_AUTHKEY:?Set CRAWLAB_FS_FILER_AUTHKEY in .env}
       CRAWLAB_TASK_HANDLER_MAXRUNNERS: ${CRAWLAB_TASK_HANDLER_MAXRUNNERS:-8}
       BHOL_MONGO_HOST: mongo
       BHOL_MONGO_PORT: "27017"
       BHOL_MONGO_DB: ${BHOL_MONGO_DB:-bhol_pipeline}
       BHOL_EXPORT_DIR: ${BHOL_EXPORT_DIR:-/data/exports/bhol}
+      BHOL_CRAWLAB_SYNC: ${BHOL_CRAWLAB_SYNC:-1}
       TZ: ${TZ:-Asia/Shanghai}
     ports:
       - "${APP_PORT:-8080}:8080"
     volumes:
       - crawlab-data:/root/.crawlab
+      - crawlab-workspace:/root/crawlab_workspace
+      - crawlab-files:/data/seaweedfs
       - bhol-exports:/data/exports
     networks:
       - deeptranx
@@ -98,5 +102,7 @@ networks:
 volumes:
   mongo-data:
   crawlab-data:
+  crawlab-workspace:
+  crawlab-files:
   bhol-exports:
   frontend-node-modules:

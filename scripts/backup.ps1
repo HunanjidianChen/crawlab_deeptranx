@@ -42,6 +42,14 @@ try {
     if ($LASTEXITCODE -ne 0) {
         throw 'Crawlab data backup failed.'
     }
+    & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup" --entrypoint /bin/sh $runtimeImage -c 'tar -C /root -czf /backup/crawlab-workspace.tar.gz crawlab_workspace'
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Crawlab workspace backup failed.'
+    }
+    & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup" --entrypoint /bin/sh $runtimeImage -c 'tar -C /data -czf /backup/crawlab-files.tar.gz seaweedfs'
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Crawlab file service backup failed.'
+    }
     & docker run --rm --volumes-from $crawlabId --volume "${backupRoot}:/backup" --entrypoint /bin/sh $runtimeImage -c 'tar -C /data -czf /backup/bhol-exports.tar.gz exports'
     if ($LASTEXITCODE -ne 0) {
         throw 'BHOL JSONL export backup failed.'
@@ -53,6 +61,8 @@ try {
         crawlabCommit = '2dbc7373eb33f2ecd2c13e6a408c90aa72574ca7'
         frontendVersion = '0.1.0'
         bholDatabase = 'bhol_pipeline'
+        includesCrawlabWorkspace = $true
+        includesCrawlabFiles = $true
         includesBholExports = $true
     }
     $metadata | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $backupRoot 'metadata.json') -Encoding UTF8

@@ -36,7 +36,8 @@ RUN python3.10 -m pip install --no-cache-dir virtualenv==20.26.6 \
 
 COPY --from=frontend-build /workspace/frontend/dist /app/dist
 COPY deploy/nginx/crawlab.conf /etc/nginx/conf.d/crawlab.conf
+COPY deploy/docker-init-deeptranx.sh /app/bin/docker-init-deeptranx.sh
 
 EXPOSE 8080
 
-CMD ["/bin/bash", "/app/bin/docker-init.sh"]
+CMD ["/bin/bash", "/app/bin/docker-init-deeptranx.sh"]

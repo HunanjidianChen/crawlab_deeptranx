@@ -18,7 +18,21 @@ MongoDB is reachable only on the Compose network. The named volumes are:
 
 - `deeptranx_mongo-data`: MongoDB `/data/db`
 - `deeptranx_crawlab-data`: Crawlab `/root/.crawlab`
+- `deeptranx_crawlab-files`: uploaded spider source files `/data/seaweedfs`
+- `deeptranx_crawlab-workspace`: materialized task workspaces `/root/crawlab_workspace`
 - `deeptranx_bhol-exports`: BHOL JSONL `/data/exports`
+
+BHOL crawlers use MongoDB as the source of truth and also publish display
+records to each Crawlab spider's result collection. Set `BHOL_CRAWLAB_SYNC=0`
+to disable this secondary result-page write.
+
+The primary BHOL records remain in MongoDB database `bhol_pipeline`. Crawlab
+result collections are secondary display copies for the Data pages, while
+article JSONL files are persisted in the `deeptranx_bhol-exports` volume.
+
+The image startup wrapper synchronizes `CRAWLAB_GRPC_AUTHKEY` to Crawlab's
+persistent node config and Compose maps it to the `CRAWLAB_GRPC_AUTH_KEY`
+compatibility name required by `crawlab-sdk`.
 
 Do not use `docker compose down --volumes` unless permanent data deletion is
 intended.
@@ -42,9 +56,9 @@ Create a consistent backup:
 .\scripts\backup.ps1
 ```
 
-The script temporarily stops Crawlab, dumps MongoDB, archives
-`/root/.crawlab` and `/data/exports`, then starts Crawlab again. Files are
-written below `backup/`.
+The script temporarily stops Crawlab, dumps MongoDB, and archives the node
+configuration, spider workspaces, uploaded source files, and JSONL exports.
+It then starts Crawlab again. Files are written below `backup/`.
 
 Restore:
 
