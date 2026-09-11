@@ -4,7 +4,7 @@
       <header>
         <span>DEEPTRANX</span>
         <h1>操作使用手册</h1>
-        <p>DEEPTRANX 采集管理系统</p>
+        <p>Crawlab 0.6.3 本地部署版</p>
       </header>
       <label class="search">
         <font-awesome-icon :icon="['fa', 'search']"/>
@@ -36,7 +36,7 @@
         </div>
         <div class="version">
           <span>系统基线</span>
-          <strong>DEEPTRANX </strong>
+          <strong>Crawlab v0.6.3</strong>
           <small>Python 3.10 统一环境</small>
         </div>
       </header>
