@@ -19,7 +19,7 @@ index 4d173c7..849bd71 100644
      { path: "/misc/my-settings", title: "router.menuItems.misc.mySettings", icon: ["fa", "user-cog"] }
    ].map((n) => (n.hidden = !0, n));
  }
-@@ -35530,8 +35529,6 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
+@@ -35530,8 +35529,8 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
        setTimeout(() => {
          localStorage.removeItem("token"), r.commit("user/resetMe"), a.push("/login");
        }, 10);
@@ -27,16 +27,19 @@ index 4d173c7..849bd71 100644
 -      a.push("/misc/disclaimer");
      }, v = () => {
        a.push("/misc/my-settings");
++    }, g = () => {
++      a.push("/misc/user-manual");
      }, _ = X(() => s.systemInfo || {});
-@@ -35542,7 +35539,6 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
+@@ -35542,7 +35541,7 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
        username: p,
        setLang: m,
        onLogout: f,
 -      onClickDisclaimer: g,
        onClickMySettings: v,
++      onClickUserManual: g,
        systemInfo: _,
        t: e
-@@ -35551,7 +35547,7 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
+@@ -35551,7 +35550,7 @@ const F_ = /* @__PURE__ */ oe(Vre, [["render", Xre], ["__scopeId", "data-v-9c728
  });
  const P_ = (e) => (Tr("data-v-eccc922c"), e = e(), $r(), e), Wre = /* @__PURE__ */ P_(() => /* @__PURE__ */ ae("div", { class: "left" }, null, -1)), Gre = { class: "right" }, qre = /* @__PURE__ */ P_(() => /* @__PURE__ */ ae("iframe", {
    class: "item",
@@ -45,7 +48,7 @@ index 4d173c7..849bd71 100644
    frameborder: "0",
    scrolling: "0",
    width: "105",
-@@ -35574,7 +35570,7 @@ function Kre(e, n, a, r, l, s) {
+@@ -35574,7 +35573,7 @@ function Kre(e, n, a, r, l, s) {
            e.systemInfo.edition === "global.edition.community" ? Xe((C(), I(c, {
              key: 0,
              class: "item",
@@ -54,7 +57,7 @@ index 4d173c7..849bd71 100644
              target: "_blank",
              type: "warning"
            }, {
-@@ -35591,7 +35587,7 @@ function Kre(e, n, a, r, l, s) {
+@@ -35591,7 +35590,7 @@ function Kre(e, n, a, r, l, s) {
            ]) : $e("", !0),
            Xe((C(), I(c, {
              class: "item",
@@ -63,21 +66,33 @@ index 4d173c7..849bd71 100644
              target: "_blank"
            }, {
              default: z(() => [
-@@ -35662,14 +35658,6 @@ function Kre(e, n, a, r, l, s) {
+@@ -35662,20 +35661,20 @@ function Kre(e, n, a, r, l, s) {
              dropdown: z(() => [
                y(g, null, {
                  default: z(() => [
 -                  Xe((C(), I(f, { onClick: e.onClickDisclaimer }, {
--                    default: z(() => [
--                      Je(ge(e.t("layouts.components.header.disclaimer")), 1)
--                    ]),
--                    _: 1
--                  }, 8, ["onClick"])), [
--                    [w, { code: "click_header_disclaimer" }]
--                  ]),
-                   Xe((C(), I(f, { onClick: e.onClickMySettings }, {
++                  Xe((C(), I(f, { onClick: e.onClickMySettings }, {
                      default: z(() => [
-                       Je(ge(e.t("layouts.components.header.mySettings")), 1)
+-                      Je(ge(e.t("layouts.components.header.disclaimer")), 1)
++                      Je(ge(e.t("layouts.components.header.mySettings")), 1)
+                     ]),
+                     _: 1
+                   }, 8, ["onClick"])), [
+-                    [w, { code: "click_header_disclaimer" }]
++                    [w, { code: "click_header_my_settings" }]
+                   ]),
+-                  Xe((C(), I(f, { onClick: e.onClickMySettings }, {
++                  Xe((C(), I(f, { onClick: e.onClickUserManual }, {
+                     default: z(() => [
+-                      Je(ge(e.t("layouts.components.header.mySettings")), 1)
++                      Je("操作使用手册")
+                     ]),
+                     _: 1
+                   }, 8, ["onClick"])), [
+-                    [w, { code: "click_header_my_settings" }]
++                    [w, { code: "click_header_user_manual" }]
+                   ]),
+                   Xe((C(), I(f, { onClick: e.onLogout }, {
 diff --git a/src/layouts/components/Header.vue b/src/layouts/components/Header.vue
 index 4785201..45d7d55 100644
 --- a/src/layouts/components/Header.vue
@@ -118,7 +133,7 @@ index 4785201..45d7d55 100644
            target="_blank"
          >
            <font-awesome-icon class="icon" :icon="['fa', 'book']"/>
-@@ -79,12 +81,6 @@
+@@ -79,18 +81,18 @@
            </span>
            <template #dropdown>
              <el-dropdown-menu>
@@ -131,10 +146,22 @@ index 4785201..45d7d55 100644
                <el-dropdown-item
                  v-track="{code: 'click_header_my_settings'}"
                  @click="onClickMySettings"
-@@ -171,11 +167,6 @@ export default defineComponent({
+               >
+                 {{ t('layouts.components.header.mySettings') }}
+               </el-dropdown-item>
++              <el-dropdown-item
++                v-track="{code: 'click_header_user_manual'}"
++                @click="onClickUserManual"
++              >
++                操作使用手册
++              </el-dropdown-item>
+               <el-dropdown-item
+                 v-track="{code: 'click_header_logout'}"
+                 @click="onLogout"
+@@ -171,16 +173,16 @@ export default defineComponent({
        }, 10);
      };
- 
+
 -    // on click disclaimer
 -    const onClickDisclaimer = () => {
 -      router.push('/misc/disclaimer');
@@ -143,12 +170,23 @@ index 4785201..45d7d55 100644
      // on click my settings
      const onClickMySettings = () => {
        router.push('/misc/my-settings');
-@@ -190,7 +181,6 @@ export default defineComponent({
+     };
+
++    // on click user manual
++    const onClickUserManual = () => {
++      router.push('/misc/user-manual');
++    };
++
+     const systemInfo = computed<SystemInfo>(() => commonState.systemInfo || {});
+
+     return {
+@@ -190,7 +192,7 @@ export default defineComponent({
        username,
        setLang,
        onLogout,
 -      onClickDisclaimer,
        onClickMySettings,
++      onClickUserManual,
        systemInfo,
        t,
 diff --git a/src/router/index.ts b/src/router/index.ts
@@ -156,7 +194,7 @@ index c597776..b442534 100644
 --- a/src/router/index.ts
 +++ b/src/router/index.ts
 @@ -78,7 +78,6 @@ export function getDefaultSidebarMenuItems(): MenuItem[] {
- 
+
  export function getDefaultHiddenMenuItems(): MenuItem[] {
    const items = [
 -    {path: '/misc/disclaimer', title: 'router.menuItems.misc.disclaimer', icon: ['fa', 'file-signature']},
